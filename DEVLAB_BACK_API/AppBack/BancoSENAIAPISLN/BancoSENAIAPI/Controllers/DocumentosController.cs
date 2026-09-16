@@ -30,7 +30,15 @@ namespace BancoSENAIAPI.Controllers
             {
                 return BadRequest("O arquivo não pode ter mais de 2 MB.");
             }
+            string extensao = Path.GetExtension(arquivo.FileName).ToLower();
 
+         
+            string[] extensoesPermitidas = { ".pdf", ".jpg", ".png" };
+
+            if (!extensoesPermitidas.Contains(extensao))
+            {
+                return BadRequest("Extensão de arquivo não permitida. Apenas .pdf, .jpg e .png são aceitos.");
+            }
             string pastaCliente = Path.Combine(_caminhoRaiz, codigoCliente.ToString());
 
             if (!Directory.Exists(pastaCliente))
@@ -38,7 +46,6 @@ namespace BancoSENAIAPI.Controllers
                 Directory.CreateDirectory(pastaCliente);
             }
 
-            string extensao = Path.GetExtension(arquivo.FileName);
 
             string nomeOriginal = Path.GetFileNameWithoutExtension(arquivo.FileName);
             string novoNome = $"{codigoCliente}_{nomeOriginal}_{Guid.NewGuid()}{extensao}";
