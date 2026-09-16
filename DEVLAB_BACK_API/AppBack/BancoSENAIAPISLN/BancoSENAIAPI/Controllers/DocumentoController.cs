@@ -15,12 +15,28 @@ namespace BancoSENAIAPI.Controllers
 
         private static int _nextId = 1;
 
+        private readonly int tamanhoMaximoArquivo = 2 * 1024 * 1024;
+
+        private readonly string[] _extensoesPermitidas = { ".pdf", ".jpg", ".png" };
+
         [HttpPost("upload/{codigoCliente}")]
         public async Task<IActionResult> AnexarArquivo(int codigoCliente, IFormFile arquivo)
         {
             if (arquivo == null || arquivo.Length == 0)
             {
                 return BadRequest("Nenhum arquivo foi enviado.");
+            }
+
+            if (arquivo.Length > tamanhoMaximoArquivo)
+            {
+                return BadRequest("Tamanho máximo excedido");
+            }
+
+            string extensao = Path.GetExtension(arquivo.FileName);
+
+            if (!_extensoesPermitidas.Contains(extensao))
+            {
+                return BadRequest("Extensão do arquivo inválida.");
             }
 
             string pastaCliente = Path.Combine(_caminhoRaiz, codigoCliente.ToString());
@@ -30,7 +46,6 @@ namespace BancoSENAIAPI.Controllers
                 Directory.CreateDirectory(pastaCliente);
             }
 
-            string extensao = Path.GetExtension(arquivo.FileName);
             string nomeOriginal = Path.GetFileNameWithoutExtension(arquivo.FileName);
             string novoNome = $"{codigoCliente}_{nomeOriginal}_{Guid.NewGuid()}{extensao}";
             string caminhoFinal = Path.Combine(pastaCliente, novoNome);
