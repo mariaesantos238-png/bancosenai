@@ -1,11 +1,11 @@
-const URL_API = 'https://localhost:7881/api/v1/Documento';
+const URL_API = 'http://localhost:5139/api/v1/Documentos';
 
 async function enviarDocumento() {
     const codigoCliente = document.getElementById("codigoCliente").value;
     const inputArquivo = document.getElementById("arquivo");
     const arquivo = inputArquivo.files[0];
 
-    if (codigoCliente || !arquivo) {
+    if (!codigoCliente || !arquivo) {
         alert("Informe o código do cliente e selecione um arquivo");
         return;
     }
@@ -25,7 +25,7 @@ async function enviarDocumento() {
 
     }
     else {
-        const erro = await response.json();
-        alert("Erro: " + (erro.message || "Falha ao enviar o Documento"));
+        
+        alert("Erro: Falha ao enviar o Documento");
     }
 }
