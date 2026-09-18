@@ -1,44 +1,51 @@
 ﻿<!DOCTYPE html>
-<html lang-"pt-br">
+<html lang="pt-br">
+
 <head>
-    <meta charset="utf-8"/>
+    <meta charset="utf-8" />
     <title>Gestão de Documentos - Banco Senai</title>
     <link rel="stylesheet" href="documento.css" />
 </head>
+
 <body>
+
     <h1>Gestão de Documentos</h1>
 
     <div class="form-container">
+
         <input type="number" id="codigoCliente" placeholder="Código do cliente" />
+
         <input type="file" id="arquivo" />
-        <button id="btEnviar" onclick="enviarDocumento()">Enviar</button>
+
+        <button id="btEnviar" onclick="enviarDocumento()">
+            Enviar
+        </button>
 
     </div>
 
-    <div class="busca-container">
-        <input type="number" id="codigoClienteBusca" placeholder="Códigoasdfsdf do Cliente" />
 
+    <div class="busca-container">
+
+        <input type="number" id="codigoClienteBusca" placeholder="Código do Cliente" />
         <button onclick="listarDocumentos()">
             Buscar Documentos
         </button>
     </div>
-
     <table>
         <thead>
             <tr>
                 <th>Id</th>
-                <th> Nome</th>
+                <th>Nome</th>
                 <th>Extensão</th>
-                <th> Ações</th>ljljk
+                <th>Ações</th>
             </tr>
         </thead>
 
         <tbody id="corpoTabela">
         </tbody>
     </table>
-
-
     <script src="documento.js"></script>
 
 </body>
+
 </html>
