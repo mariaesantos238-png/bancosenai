@@ -71,7 +71,7 @@ namespace BancoSENAIAPI.Controllers
 
             return Ok(new { mensagem = "Documento anexado com sucesso", arquivoSalvo = novoNome });
         }
-        [HttpGet("listar/(codigoCliente")]
+        [HttpGet("listar/{codigoCliente}")]
         public IActionResult ListarDocumentos(int codigoCliente) {
         var documentos = _documentoMetadados
                 .Where(d => d.CodigoCliente == codigoCliente)

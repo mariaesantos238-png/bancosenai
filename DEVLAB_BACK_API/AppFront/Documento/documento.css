@@ -1,13 +1,65 @@
-body {font-family: Arial, sans-serif; padding: 20px;}
-h1 {color: #003366; }
-.form-container {
-    margin-bottom: 30px;
-    background: #f9f9f9;
-    padding: 15px;
-    border-radius: 5px;
+body {
+    font-family: Arial, sans-serif;
+    padding: 20px;
 }
+
+h1 {
+    color: #003366;
+}
+
+.form-container,
+.busca-container {
+    margin-bottom: 15px;
+    background: #f9f9f9;
+    padding: 12px;
+}
+
 input {
     padding: 8px;
-    margin-right: 10px;
+    margin-right: 8px;
     border: 1px solid #ccc;
+}
+
+button {
+    padding: 8px 12px;
+    border: none;
+    cursor: pointer;
+}
+
+#btEnviar {
+    background-color: #28a745;
+    color: white;
+}
+
+.busca-container button {
+    background-color: #007bff;
+    color: white;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+}
+
+th {
+    background-color: #003366;
+    color: white;
+    text-align: left;
+    padding: 8px;
+}
+
+td {
+    padding: 8px;
+    border-bottom: 1px solid #ddd;
+}
+
+.btn-baixar {
+    background-color: #ffc107;
+    color: black;
+}
+
+.btn-excluir {
+    background-color: #dc3545;
+    color: white;
 }
