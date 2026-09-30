@@ -1,5 +1,7 @@
 ﻿using BancoSENAIAPI.Models;
 using Microsoft.AspNetCore.Mvc;
+using BancoSENAIAPI.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace BancoSENAIAPI.Controllers
 {
@@ -7,27 +9,34 @@ namespace BancoSENAIAPI.Controllers
     [Route("api/v1/[controller]")]
     public class CarteiraController : ControllerBase
     {
-        private static List<Carteira> _carteiras = new List<Carteira>();
-
-        
-        [HttpGet]
-        public IActionResult ListarTodas()
+        private readonly AppDbContext _context;
+        public CarteiraController(AppDbContext context)
         {
-            return Ok(_carteiras);
+            _context = context;
         }
 
-     
-        [HttpPost]
-        public IActionResult Cadastrar([FromBody] Carteira novaCarteira)
+
+        [HttpGet]
+        public async Task<IActionResult> ListarTodas()
         {
-        
-            if (_carteiras.Any(c => c.NumeroCarteira == novaCarteira.NumeroCarteira))
+            var carteiras = await _context.Carteira.ToListAsync();
+
+            return Ok(carteiras);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Cadastrar([FromBody] Carteira novaCarteira)
+        {
+
+            if (await _context.Carteira.AnyAsync(
+               c => c.NumeroCarteira == novaCarteira.NumeroCarteira))
+            {
                 return BadRequest(new
                 {
                     message = "Este número de carteira já existe."
                 });
+            }
 
-           
             if (novaCarteira.ApetiteCarteira < 0)
                 return BadRequest(new
                 {
@@ -38,17 +47,17 @@ namespace BancoSENAIAPI.Controllers
             if (novaCarteira.ApetiteCarteira == 0)
                 novaCarteira.ApetiteCarteira = 1000000;
 
-            _carteiras.Add(novaCarteira);
+            await _context.Carteira.AddAsync(novaCarteira);
+            await _context.SaveChangesAsync();
 
             return Created("", novaCarteira);
         }
 
         [HttpGet("{numero}")]
-        public IActionResult ConsultarPorNumero(int numero)
+        public async Task<IActionResult> ConsultarPorNumero(int numero)
         {
-            var carteira = _carteiras.FirstOrDefault(
-                c => c.NumeroCarteira == numero
-            );
+            var carteira = await _context.Carteira
+               .FirstOrDefaultAsync(c => c.NumeroCarteira == numero);
 
             if (carteira == null)
                 return NotFound(new
@@ -61,13 +70,11 @@ namespace BancoSENAIAPI.Controllers
 
       
         [HttpPut("{numero}")]
-        public IActionResult Alterar(
+        public async Task<IActionResult> Alterar(
             int numero,
             [FromBody] Carteira carteiraAtualizada)
         {
-            var carteiraExistente = _carteiras.FirstOrDefault(
-                c => c.NumeroCarteira == numero
-            );
+            var carteiraExistente = await _context.Carteira.FirstOrDefaultAsync(c => c.NumeroCarteira == numero);
 
             if (carteiraExistente == null)
                 return NotFound(new
@@ -86,18 +93,19 @@ namespace BancoSENAIAPI.Controllers
                 carteiraAtualizada.NomeCarteira;
 
             carteiraExistente.ApetiteCarteira =
-                carteiraAtualizada.ApetiteCarteira;
+             carteiraAtualizada.ApetiteCarteira;
+
+            await _context.SaveChangesAsync();
+
 
             return NoContent();
         }
 
       
         [HttpDelete("{numero}")]
-        public IActionResult Excluir(int numero)
+        public async Task<IActionResult> Excluir(int numero)
         {
-            var carteira = _carteiras.FirstOrDefault(
-                c => c.NumeroCarteira == numero
-            );
+            var carteira = await _context.Carteira.FirstOrDefaultAsync(c => c.NumeroCarteira == numero);
 
             if (carteira == null)
                 return NotFound(new
@@ -105,7 +113,8 @@ namespace BancoSENAIAPI.Controllers
                     message = "Carteira não encontrada."
                 });
 
-            _carteiras.Remove(carteira);
+            _context.Carteira.Remove(carteira);
+            await _context.SaveChangesAsync();
 
             return Ok(new
             {
