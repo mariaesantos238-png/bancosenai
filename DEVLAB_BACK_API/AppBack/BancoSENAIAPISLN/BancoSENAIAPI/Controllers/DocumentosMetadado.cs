@@ -5,7 +5,7 @@ namespace BancoSENAIAPI.Controllers
 {
     [ApiController]
     [Route("api/v1/[controller]")]
-    public class DocumentosController : Controller
+    public class DocumentosMetadado : Controller
     {
         private readonly string _caminhoRaiz = Path.Combine(
             Directory.GetCurrentDirectory(),

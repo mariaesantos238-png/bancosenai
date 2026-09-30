@@ -1,4 +1,6 @@
-﻿namespace BancoSENAIAPI.Models
+﻿
+using System.ComponentModel.DataAnnotations;
+namespace BancoSENAIAPI.Models
 {
     public class Carteira
     {
