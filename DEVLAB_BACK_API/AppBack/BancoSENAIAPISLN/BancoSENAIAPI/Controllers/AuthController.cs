@@ -25,7 +25,7 @@ namespace BancoSENAIAPI.Controllers
         [HttpPost("registrar")]
         public async Task<IActionResult> Registrar([FromBody] RegisterRequest dto)
         {
-            if (await _context.Usuarios.AnyAsync(u => u.NomeUsuario == dto.NomeUsuario)) 
+            if (await _context.Usuario.AnyAsync(u => u.NomeUsuario == dto.NomeUsuario)) 
             {
                 return BadRequest(new { message = "Este nome de usuário já está em uso" });
             }
@@ -36,7 +36,7 @@ namespace BancoSENAIAPI.Controllers
                 SenhaHash = BCrypt.Net.BCrypt.HashPassword(dto.Senha)
             };
 
-            _context.Usuarios.Add(usuario);
+            _context.Usuario.Add(usuario);
             await _context.SaveChangesAsync();
 
             return Created("", new {usuario.Id, usuario.NomeUsuario });
@@ -46,9 +46,9 @@ namespace BancoSENAIAPI.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginRequestDto dto)
         {
-            var usuario = await _context.Usuarios.FirstOrDefaultAsync(u => u.NomeUsuario == dto.NomeUsuario);
+            var usuario = await _context.Usuario.FirstOrDefaultAsync(u => u.NomeUsuario == dto.NomeUsuario);
 
-            if (usuario == null || BCrypt.Net.BCrypt.Verify(dto.Senha, usuario.SenhaHash))
+            if (usuario == null || !BCrypt.Net.BCrypt.Verify(dto.Senha, usuario.SenhaHash))
             {
                 return Unauthorized(new {message = "Usuário ou senha inválidos"});
             }

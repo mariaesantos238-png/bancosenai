@@ -3,6 +3,7 @@ namespace BancoSENAIAPI.Models
 {
     public class Cliente
     {
+        [Key]
         public int CodigoCliente { get; set; }
         public string NomeCliente { get; set; }
         public string Cpf { get; set; }
